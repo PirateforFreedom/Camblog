@@ -1,0 +1,172 @@
+﻿html,body {
+    margin: 0; padding: 0;
+   
+  overflow-y: hidden;
+    overflow-x: hidden;
+  
+}
+#leftpage{
+    width:50%;
+    height:719px;
+    float:left;
+    background-color:dodgerblue;
+}
+#rightpage{
+   width:50%;
+   height:722px;
+   float:left;
+  
+}
+#text1{
+   width:40%;
+   height:3%;
+   float:left;
+   margin-left:30%;
+   margin-top:40%;
+   font-family:sans-serif;
+    font-size:x-large;
+   color:white;
+    font-family:Trebuchet MS, Arial, Helvetica;font-size: 20px;
+    font-weight:bold;
+  
+   
+}
+#text2{
+   width:60%;
+   height:3%;
+   float:left;
+   margin-left:30%;
+   margin-top:6%;
+   font-family:sans-serif;
+ font-size:x-large;
+   color:white;
+   font-family:Trebuchet MS, Arial, Helvetica;font-size: 20px;
+    font-weight:bold;
+   
+}
+
+#text3{
+   width:40%;
+   height:3%;
+   float:left;
+   margin-left:30%;
+   margin-top:6%;
+   font-family:sans-serif;
+    font-size:x-large;
+   color:white;
+   font-family:Trebuchet MS, Arial, Helvetica;font-size: 20px;
+    font-weight:bold;
+   
+}
+#logouban{
+   width:85%;
+   height:6%;
+   float:left;
+   margin-top:27%;
+   font-family:sans-serif;
+   font-size:xx-large;
+  margin-left:10%;
+   font-family:Trebuchet MS, Arial, Helvetica;font-size: 32px;
+    font-weight:bold;
+   
+   
+}
+#userdiv{
+   width:20%;
+   height:6%;
+   float:left;
+   margin-left:25.5%;
+   margin-top:8%;
+   border-radius:5%;
+ 
+ 
+   
+}
+#passdiv{
+    width:22%;
+   height:6%;
+    float:left;
+  
+   border-radius:5%;
+    margin-left:5.5%;
+   margin-top:8%;
+}
+#usertxt{
+    border-width:1px;
+    width:100%;
+    height:100%;
+  
+  border-radius:4%;
+  
+   font-family:Trebuchet MS, Arial, Helvetica;font-size: 14px;
+   
+   
+}
+#passwordtxt{
+    border-width:1px;
+    width:100%;
+    height:100%;
+   font-family:Trebuchet MS, Arial, Helvetica;font-size: 14px;
+    
+  border-radius:4%;
+    
+   
+}
+#Loginbutton{
+    background-color:dodgerblue;
+    border-color:dodgerblue;
+    color:white;
+     font-family:Trebuchet MS, Arial, Helvetica;font-size: 14px;
+     font-weight:bold;
+     width:100%;
+     height:100%;
+     outline:none;
+}
+
+#passworddiv{
+   width:22%;
+   height:5%;
+   float:left;
+   margin-left:4%;
+   margin-top:8%;
+  
+   
+   
+}
+#denglu{
+   width:48%;
+   height:5%;
+   float:left;
+   margin-left:25.5%;
+   margin-top:3.5%;
+  border-radius:5%;
+   
+}
+#Loginbutton{
+    border-radius:18px;
+   
+    border-style:none;
+}
+#zhucebutton{
+    border-radius:18px;
+   height:100%;
+   width:100%;
+    border-width:1px;
+    background-color:white;
+    border-color:dodgerblue;
+    color:dodgerblue;
+     font-family:Trebuchet MS, Arial, Helvetica;font-size: 14px;
+     font-weight:bold;
+      outline:none;
+}
+
+#zhuce{
+   width:48%;
+   height:5%;
+   float:left;
+   margin-left:25.5%;
+   margin-top:3%;
+   
+}
+
+
