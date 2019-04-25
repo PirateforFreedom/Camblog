@@ -237,9 +237,10 @@ z-index:1;
    width:57%;
    height:25px;
    float:left;
-   margin-left:33%;
+   margin-left:39.5%;
    font-family:Trebuchet MS, Arial, Helvetica;font-size: 21px;
     font-weight:bold;
+   
    
   
 }
@@ -248,10 +249,10 @@ z-index:1;
    height:25px;
    clear:both;
    float:left;
-   margin-top:3%;
-    margin-left:33%;
+   margin-top:8%;
+    margin-left:23%;
     font-family:Trebuchet MS, Arial, Helvetica;font-size: 15px;color: #666666;
-   
+  
 }
  #pprofile-location{
   
@@ -260,7 +261,7 @@ z-index:1;
    clear:both;
    float:left;
    margin-top:3%;
-   margin-left:33%;
+   margin-left:23%;
     font-family:Trebuchet MS, Arial, Helvetica;font-size: 15px;color: #666666;
     
 }
@@ -271,7 +272,7 @@ z-index:1;
    clear:both;
    float:left;
    margin-top:3%;
-   margin-left:33%;
+   margin-left:22%;
     font-family:Trebuchet MS, Arial, Helvetica;font-size: 15px;color: #666666;
      
 }

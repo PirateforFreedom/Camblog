@@ -45,6 +45,41 @@ public class WebService : System.Web.Services.WebService
        
     }
     [WebMethod]
+    public string InsertCommentTxt(string strtxt, string usernamef, string userposttime,string pic)
+    {
+
+            string squd = "insert into r_person_posts_comment_t(user_posts_personnum,user_reply_content,user_replyer,user_follower_pictrue,user_comment_date)" +
+"values('" + userposttime + "', '" + strtxt + "','"+ usernamef+ "','"+ pic + "',NOW())";
+
+            int ty1 = mysl.ExecuteNonQuery(squd);
+        int numposts = 0;
+        string strquary = "select user_post_coment_sum from r_person_posts_t where user_post_personsd='" + userposttime + "'";
+        DataTable dtb = mysl.ExecuteDataTable(strquary);
+            int st = int.Parse(dtb.Rows[0][0].ToString());
+            st++;
+        numposts = st;  
+        string vb = "update r_person_posts_t set user_post_coment_sum='"+ numposts+"' where user_post_personsd='" + userposttime + "'";
+        int ty3 = mysl.ExecuteNonQuery(vb);
+        return "yes";
+     
+    }
+    [WebMethod]
+    public string InsertCommentlikes(string userposttime)
+    {
+
+        
+        int numposts = 0;
+        string strquary = "select user_post_like_num from r_person_posts_t where user_post_personsd='" + userposttime + "'";
+        DataTable dtb = mysl.ExecuteDataTable(strquary);
+        int st = int.Parse(dtb.Rows[0][0].ToString());
+        st++;
+        numposts = st;
+        string vb = "update r_person_posts_t set user_post_like_num=" + numposts + " where user_post_personsd='" + userposttime + "'";
+        int ty3 = mysl.ExecuteNonQuery(vb);
+        return "yes";
+
+    }
+    [WebMethod]
     public string InsertTxt(string strtxt,string usernamef,string userposttime)
     {
 
@@ -69,53 +104,108 @@ public class WebService : System.Web.Services.WebService
             int ty1= mysl.ExecuteNonQuery(squd);
            
         }
+
         string stbb = "select user_name_tiaoshu from r_person_postsffsum_t where user_name = '"+ usernamef+"'";
         DataTable dtb1 = mysl.ExecuteDataTable(stbb);
         int reatiaoshu =Convert.ToInt32(dtb1.Rows[0][0].ToString());
         reatiaoshu++;
         string vb1 = "update r_person_postsffsum_t set user_name_tiaoshu=" + reatiaoshu + " where user_name='" + usernamef + "'";
         int ty3b = mysl.ExecuteNonQuery(vb1);
-
-        string strsql = "insert into r_person_posts_t(user_name,user_post_content,user_post_date)" +
-"values('"+ usernamef + "', '"+strtxt+ "', NOW())";
-
-        int ty =mysl.ExecuteNonQuery(strsql);
-        if (ty== 1)
+        string strquarydfasrrr = "select user_posts_personnum from r_person_posts_t where  user_name='"+ usernamef+"' order by user_post_date desc ";
+        DataTable dtbd = mysl.ExecuteDataTable(strquarydfasrrr);
+        if (dtbd.Rows.Count >= 1)
         {
-            string string1 = "yes";
+            int niusd = Convert.ToInt32(dtbd.Rows[0][0].ToString());
+            niusd++;
+            string strsql = "insert into r_person_posts_t(user_name,user_post_content,user_post_date,user_posts_personnum,user_post_personsd)" +
+"values('" + usernamef + "', '" + strtxt + "', NOW(),"+niusd+",'" + usernamef + "_"+niusd.ToString()+"')";
+            int ty = mysl.ExecuteNonQuery(strsql);
+            if (ty == 1)
+            {
+                string string1 = "yes";
 
-            return string1;
+                return string1;
+            }
+            else
+            {
+                string string1 = "no";
+
+                return string1;
+                //return "no";
+            }
         }
         else
         {
-            string string1 = "no";
+            string strsql = "insert into r_person_posts_t(user_name,user_post_content,user_post_date,user_posts_personnum,user_post_personsd)" +
+"values('" + usernamef + "', '" + strtxt + "', NOW(),1,'"+usernamef+"_1')";
+            int ty = mysl.ExecuteNonQuery(strsql);
+            if (ty==1)
+            {
+                string string1 = "yes";
 
-            return string1;
-            //return "no";
-    }
+                return string1;
+            }
+            else
+            {
+                string string1 = "no";
+
+                return string1;
+                //return "no";
+            }
+        }
+           
+
+        
     }
     [WebMethod]
     public DataSet GetDataSetforpersonpostforuser(string username1)
     {
-        string strquary = "SELECT user_post_content,user_post_date FROM r_person_posts_t where user_name='"+ username1+"'";
+        string strquary = "select t.*,p.user_pictrue from (select user_post_content,user_post_date ,user_name,user_post_personsd,user_post_like_num from r_person_posts_t  order by user_post_date asc) as t,r_user_information_t as p " +
+" where t.user_name = p.user_name and p.user_name='"+ username1+"'";
         DataTable dtb = mysl.ExecuteDataTable(strquary);
         var ds = new DataSet();
         var dt = new DataTable();
         dt.Columns.Add("user_post_content");
         dt.Columns.Add("user_post_date");
+        dt.Columns.Add("user_name");
+        dt.Columns.Add("user_post_personsd");
+        dt.Columns.Add("user_post_like_num");
+        dt.Columns.Add("user_pictrue");
         int nump = dtb.Rows.Count;
         for (int i = 0; i < nump; i++)
         {
-            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString());
+            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString(), dtb.Rows[i][2].ToString(), dtb.Rows[i][3].ToString(), dtb.Rows[i][4].ToString(), dtb.Rows[i][5].ToString());
         }
         ds.Tables.Add(dt);
-       
+      
+
+        return ds;
+    }
+    [WebMethod]
+    public DataSet GetDataSetforpersonpostforuser__for_comment(string username1)
+    {
+        string strquary = "select user_reply_content,user_replyer,user_follower_pictrue,user_comment_date from r_person_posts_comment_t where user_posts_personnum='" + username1+"'";
+        DataTable dtb = mysl.ExecuteDataTable(strquary);
+        var ds = new DataSet();
+        var dt = new DataTable();
+        dt.Columns.Add("user_reply_content");
+        dt.Columns.Add("user_replyer");
+        dt.Columns.Add("user_follower_pictrue");
+        dt.Columns.Add("user_comment_date");
+        int nump = dtb.Rows.Count;
+        for (int i = 0; i < nump; i++)
+        {
+            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString(), dtb.Rows[i][2].ToString(), dtb.Rows[i][3].ToString());
+        }
+        ds.Tables.Add(dt);
+        string vb = "update r_person_posts_t set user_post_comment_tiaoshu='"+nump+"' where user_post_personsd='"+ username1+"'";
+        int ty3 = mysl.ExecuteNonQuery(vb);
         return ds;
     }
     [WebMethod]
     public DataSet  GetDataSetforpersonpost(string username1)
     {
-        string strquary = "select t.*,p.user_pictrue from (select user_post_content,user_post_date ,user_name from r_person_posts_t  order by user_post_date asc) as t,r_user_information_t as p "+
+        string strquary = "select t.*,p.user_pictrue from (select user_post_content,user_post_date ,user_name,user_post_personsd,user_post_like_num from r_person_posts_t  order by user_post_date asc) as t,r_user_information_t as p " +
 " where t.user_name = p.user_name";
         DataTable dtb = mysl.ExecuteDataTable(strquary);
         var ds = new DataSet();
@@ -123,11 +213,13 @@ public class WebService : System.Web.Services.WebService
         dt.Columns.Add("user_post_content");
         dt.Columns.Add("user_post_date");
         dt.Columns.Add("user_name");
+        dt.Columns.Add("user_post_personsd");
+        dt.Columns.Add("user_post_like_num");
         dt.Columns.Add("user_pictrue");
         int nump = dtb.Rows.Count;
         for (int i = 0; i < nump; i++)
         {
-            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString(), dtb.Rows[i][2].ToString(), dtb.Rows[i][3].ToString());
+            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString(), dtb.Rows[i][2].ToString(), dtb.Rows[i][3].ToString(), dtb.Rows[i][4].ToString(), dtb.Rows[i][5].ToString());
         }
         ds.Tables.Add(dt);
         string vb = "update r_person_postsffsum_t set user_name_tiaoshu="+ nump+" where user_name='"+ username1+"'";
@@ -203,6 +295,27 @@ public class WebService : System.Web.Services.WebService
        // dt.Rows.Add("asdf");
  
          ds.Tables.Add(dt);
+        return ds;
+
+    }
+    [WebMethod]
+
+    public DataSet Getfollowingforuser_for_comment(string folloingusername)
+   {
+       string strquary = "SELECT user_post_coment_sum,user_post_comment_tiaoshu FROM r_person_posts_t where user_post_personsd='"+ folloingusername+"'";
+        DataTable dtb = mysl.ExecuteDataTable(strquary);
+        var ds = new DataSet();
+       var dt = new DataTable();
+        dt.Columns.Add("user_post_coment_sum");
+        dt.Columns.Add("user_post_comment_tiaoshu");
+        
+        for (int i = 0; i < dtb.Rows.Count; i++)
+        {
+            dt.Rows.Add(dtb.Rows[i][0].ToString(), dtb.Rows[i][1].ToString());
+        }
+        // dt.Rows.Add("asdf");
+
+       ds.Tables.Add(dt);
         return ds;
 
     }
