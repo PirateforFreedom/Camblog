@@ -45,6 +45,67 @@ public class WebService : System.Web.Services.WebService
        
     }
     [WebMethod]
+    /*
+     * 验证名字是否被注册
+     */
+    public string VerifyNickname(string nickname)
+    {
+        DataTable dtb = mysl.ExecuteDataTable("select * from r_user_information_t where user_name='" + nickname +  "'");
+        if (dtb.Rows.Count == 1)
+        {
+            return "yes";
+        }
+        else
+        {
+            return "no";
+
+        }
+    }
+    [WebMethod]
+    public string SaveImage(string image)
+    {
+        return "yes";
+    }
+    [WebMethod]
+    /*
+     *将新建用户信息插入数据表
+     * 
+     */
+    public string InsertPersonInformation(string nickname, string pass, string realname, string specialty, string school, string email, string birth, string enroll, string sex,string country)
+    {
+
+        int nowyear = int.Parse(DateTime.Now.Year.ToString());
+        DateTime dt = DateTime.Parse(birth);
+        int birthyear = int.Parse(dt.Year.ToString());
+        string ageing = (nowyear - birthyear + 1).ToString();
+        string sex_id = "0";
+        if(sex.CompareTo("male") == 0)
+        {
+            sex_id ="0";
+        }else
+        {
+            sex_id = "1";
+        }
+        string strsql = "insert into r_user_information_t(user_name,user_password,person_real,ageing,school_name,sex_id,country,major_in,enroll,birth,email,date_time) " +
+            "values('" + nickname + "', '" + pass + "', '" + realname + "', " + ageing + ", '" + school + "', " + sex_id + ", '" + country + "', '" + specialty + "', '" +
+            enroll + "', '" + birth + "', '" + email + "',NOW())";
+        //string strsql = "insert into r_user_information_t(user_name,user_password,person_real,ageing,school_name,sex_id,country,major_in) " +
+        //    "values('" + nickname + "', '" + pass + "', '" + realname + "', " + ageing+ ", '"+school+"', "+sex_id+", '"+country+"', '"+specialty+
+        //    "',NOW())";
+
+        int ty1 = mysl.ExecuteNonQuery(strsql);
+        if(ty1 == 1)
+        {
+            return "yes";
+        }else
+        {
+            return "no";
+        }
+//        string strsql = "insert into r_person_posts_t(user_name,user_post_content,user_post_date)" +
+//"values('" + usernamef + "', '" + strtxt + "', NOW())";
+        
+    }
+    [WebMethod]
     public string InsertTxt(string strtxt,string usernamef,string userposttime)
     {
 
