@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.IO;
 /// <summary>
 /// WebService 的摘要说明
 /// </summary>
@@ -62,8 +63,23 @@ public class WebService : System.Web.Services.WebService
         }
     }
     [WebMethod]
-    public string SaveImage(string image)
+    public string SaveImage(string image ,string name)
     {
+        string username = name;
+        var arr = image.Split(',');
+        byte[] bytes = Convert.FromBase64String(arr[1]);
+        var strUploadPath = HttpContext.Current.Server.MapPath("") + "\\picture";
+        Console.Write(strUploadPath);
+        if(!Directory.Exists(strUploadPath))
+        {
+            Directory.CreateDirectory(strUploadPath);
+        }
+        string strImagePath = strUploadPath + '\\' + username + ".jpeg";
+        Console.Write(strImagePath);
+        using(FileStream objfilestream = new FileStream(strImagePath, FileMode.Create, FileAccess.ReadWrite))
+        {
+            objfilestream.Write(bytes, 0, bytes.Length);
+        }
         return "yes";
     }
     [WebMethod]
@@ -71,7 +87,7 @@ public class WebService : System.Web.Services.WebService
      *将新建用户信息插入数据表
      * 
      */
-    public string InsertPersonInformation(string nickname, string pass, string realname, string specialty, string school, string email, string birth, string enroll, string sex,string country)
+    public string InsertPersonInformation(string nickname, string user_picture,string pass, string realname, string specialty, string school, string email, string birth, string enroll, string sex,string country)
     {
 
         int nowyear = int.Parse(DateTime.Now.Year.ToString());
@@ -86,8 +102,8 @@ public class WebService : System.Web.Services.WebService
         {
             sex_id = "1";
         }
-        string strsql = "insert into r_user_information_t(user_name,user_password,person_real,ageing,school_name,sex_id,country,major_in,enroll,birth,email,date_time) " +
-            "values('" + nickname + "', '" + pass + "', '" + realname + "', " + ageing + ", '" + school + "', " + sex_id + ", '" + country + "', '" + specialty + "', '" +
+        string strsql = "insert into r_user_information_t(user_name,user_pictrue,user_password,person_real,ageing,school_name,sex_id,country,major_in,enroll,birth,email,date_time) " +
+            "values('" + nickname + "', '" + user_picture + "', '"+pass + "', '" + realname + "', " + ageing + ", '" + school + "', " + sex_id + ", '" + country + "', '" + specialty + "', '" +
             enroll + "', '" + birth + "', '" + email + "',NOW())";
         //string strsql = "insert into r_user_information_t(user_name,user_password,person_real,ageing,school_name,sex_id,country,major_in) " +
         //    "values('" + nickname + "', '" + pass + "', '" + realname + "', " + ageing+ ", '"+school+"', "+sex_id+", '"+country+"', '"+specialty+
@@ -288,6 +304,7 @@ public class WebService : System.Web.Services.WebService
 
         ds.Tables.Add(dt);
         return ds;
+
 
     }
 }
