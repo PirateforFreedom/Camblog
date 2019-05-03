@@ -17,61 +17,7 @@
         <script type="text/javascript" src ="Scripts/jquery-3.4.0.min.js"></script>
         <script type="text/javascript" src ="js/CBPersonInformation.js"></script>
         <script>            
-            //获取上传按钮
-            var input1 = document.getElementById("upload");
-            if (typeof FileReader === 'undefined') {
-                //result.innerHTML = "抱歉，你的浏览器不支持 FileReader"; 
-                input1.setAttribute('disabled', 'disabled');
-            } else {
-                input1.addEventListener('change', readFile, false);
-
-            }
-
-            function readFile() {
-                
-                var file = this.files[0]; //获取上传文件列表中第一个文件
-                if (!/image\/\w+/.test(file.type)) {
-                    //图片文件的type值为image/png或image/jpg
-                    alert("文件必须为图片！");
-                    return false;
-                }
-                // console.log(file);
-                var reader = new FileReader(); //实例一个文件对象
-                reader.readAsDataURL(file); //把上传的文件转换成url
-
-                //当文件读取成功便可以调取上传的接口
-                reader.onload = function (e) {
-                    var img_base = reader.result;
-                    console.log("%s", img_base);
-                    var image = new Image();
-                    // 设置src属性 
-                    image.src = e.target.result;
-                    var max = 200;
-                    // 绑定load事件处理器，加载完成后执行，避免同步问题           
-                    // 获取 canvas DOM 对象 
-                    document.getElementById("cvs").src = this.result;
-                    
-                    $.ajax({
-                        type: "POST",   //访问WebService使用Post方式请求
-                        ContentType: "application/json", //WebService 会返回Json类型
-                        url: "WebService.asmx/SaveImage", //调用WebService的地址和方法名称组合 ---- WsURL/方法名                      
-                        data: { image: image.src, name: username },
-                        dataType: 'json',
-                        success: function (result) {//回调函数，result，返回值
-                            var r = result.d;
-                            if (r == "yes") {
-                                alert("right");
-                            } else {
-                                alert("error");
-                            }
-                        }
-
-                    });
-                    
-
-                };              
-             
-            }
+            
             
         </script>
 		<h1 class="back"></h1>
@@ -87,7 +33,7 @@
                  <div class="listinfo" style="margin-top:30px;">
                      <span>上传头像<input type="file" accept="image/jpeg,image/png" style="margin:30;background-color: aquamarine" id="upload" " /></span>
                  </div>  
-                自我介绍：  <input class="border" type="text" id="nickname" name="nickname" placeholder="用户名,长度为6到12字符"
+                自我介绍：  <input class="border" type="text" id="statement" name="nickname" placeholder="用户名,长度为6到12字符"
                            onblur="checkName()">
                 <div class="listinfo" style="margin-top:30px;">
                     昵称： <input class="border" type="text" id="nickname" name="nickname" placeholder="用户名,长度为6到12字符"
