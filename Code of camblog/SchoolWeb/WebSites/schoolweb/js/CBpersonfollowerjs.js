@@ -1,7 +1,7 @@
 ﻿
 function onload_information() {
     var usernameonline = getQueryString("username")
-    //var usernameonline = 'jack';
+   // var usernameonline = 'tom';
     $.ajax({
         url: "WebService.asmx/GetUserInformation",
         type: "Post",
@@ -28,11 +28,11 @@ function onload_information() {
                 var bthome5 = document.getElementById('pprofile-name');
                 bthome5.innerHTML = usernameonline;
                 var bthome5 = document.getElementById('pprofile-statement');
-                bthome5.innerHTML = strstatement;
+                bthome5.innerHTML = "Statement:" + strstatement;
                 var bthome5 = document.getElementById('pprofile-location');
-                bthome5.innerHTML = strcountry;
+                bthome5.innerHTML = "From Coutry:" + strcountry;
                 var bthome5 = document.getElementById('pprofile-date');
-                bthome5.innerHTML = strdate_time;
+                bthome5.innerHTML = "Join Time:" + strdate_time;
                 var bthome5 = document.getElementById('Followersbutton');
                 bthome5.style.color = "dodgerblue";
                 var bthome2 = document.getElementById('Label3');
@@ -175,7 +175,7 @@ function add_div(strpostcontent, strpostdate, strpostname, strpostpic, strpostco
     var styleflydiv = document.createAttribute('style');
     person_contentflydiv.setAttributeNode(styleflydiv);
     person_contentflydiv.style.width = "297px";
-    person_contentflydiv.style.height = "280px";
+    person_contentflydiv.style.height = "250px";
     person_contentflydiv.style.backgroundColor = "white"
     person_contentflydiv.style.marginLeft = "3px"
     person_contentflydiv.style.marginTop = "3px"
@@ -208,14 +208,17 @@ function add_div(strpostcontent, strpostdate, strpostname, strpostpic, strpostco
     person_contentflydiv_pic.id = "details" + detail_div;
     var stylepic = document.createAttribute('style');
     person_contentflydiv_pic.setAttributeNode(stylepic);
-    person_contentflydiv_pic.style.width = "20%";
-    person_contentflydiv_pic.style.height = "100%";
+    person_contentflydiv_pic.style.width = "25%";
+    person_contentflydiv_pic.style.height = "68px";
     person_contentflydiv_pic.style.marginLeft = "4%";
-    person_contentflydiv_pic.style.marginTop = "5%";
+    person_contentflydiv_pic.style.marginTop = "-8%";
     //person_cotentflydiv_pic.style.marginTop = "12%";
     person_contentflydiv_pic.style.cssFloat = "left";
     person_contentflydiv_pic.style.borderRadius = "50%";
-    person_contentflydiv_pic.style.backgroundImage = "url("+strpostpic+")";
+    person_contentflydiv_pic.style.borderColor = "white"
+    person_contentflydiv_pic.style.borderWidth = "2px"
+    person_contentflydiv_pic.style.borderStyle = "solid"
+    person_contentflydiv_pic.style.backgroundImage = "url(" + strpostpic + ")";
     person_contentflydiv_picbar1.appendChild(person_contentflydiv_pic);
     detail_div++;
     var person_contentflydiv_namebar = document.createElement('div');
@@ -232,12 +235,12 @@ function add_div(strpostcontent, strpostdate, strpostname, strpostpic, strpostco
     person_contentflydiv_name.id = "details" + detail_div;
     var stylepic = document.createAttribute('style');
     person_contentflydiv_name.setAttributeNode(stylepic);
-    person_contentflydiv_name.style.width = "40%";
+    person_contentflydiv_name.style.width = "50%";
     person_contentflydiv_name.innerHTML = strpostname;
-    person_contentflydiv_name.style.height = "45%";
+    person_contentflydiv_name.style.height = "25%";
     person_contentflydiv_name.style.cssFloat = "left";
-    person_contentflydiv_name.style.marginLeft = "30%";
-    person_contentflydiv_name.style.marginTop = "10%";
+    person_contentflydiv_name.style.marginLeft = "40%";
+    person_contentflydiv_name.style.marginTop = "2%";
     person_contentflydiv_name.style.fontFamily = "Trebuchet MS, Arial, Helvetica";
     person_contentflydiv_name.style.fontSize = "21px";
     person_contentflydiv_name.style.fontWeight = "bold";
@@ -249,10 +252,10 @@ function add_div(strpostcontent, strpostdate, strpostname, strpostpic, strpostco
     var stylepic = document.createAttribute('style');
     person_contentflydiv_date.setAttributeNode(stylepic);
     person_contentflydiv_date.style.width = "100%";
-    person_contentflydiv_date.innerHTML = strpostcontent + strpostdate + strpostcon;
+    person_contentflydiv_date.innerHTML = strpostcontent ;
     person_contentflydiv_date.style.height = "45%";
     person_contentflydiv_date.style.cssFloat = "left";
-    person_contentflydiv_date.style.marginLeft = "2%";
+    person_contentflydiv_date.style.marginLeft = "6%";
     person_contentflydiv_date.style.marginTop = "2%";
     person_contentflydiv_date.style.fontFamily = "Trebuchet MS, Arial, Helvetica";
     person_contentflydiv_date.style.fontSize = "15px";
@@ -265,10 +268,11 @@ function add_div(strpostcontent, strpostdate, strpostname, strpostpic, strpostco
     person_contentflydiv_button.setAttributeNode(stylepic);
     person_contentflydiv_button.style.width = "30%";
     person_contentflydiv_button.innerHTML = "Follow"
-    person_contentflydiv_button.style.height = "50%";
+    person_contentflydiv_button.style.height = "55%";
     person_contentflydiv_button.style.cssFloat = "left";
-    person_contentflydiv_button.style.marginLeft = "40%";
-    person_contentflydiv_button.style.marginTop = "7%";
+    person_contentflydiv_button.style.marginLeft = "35%";
+    person_contentflydiv_button.style.marginTop = "5%";
+    person_contentflydiv_button.style.borderRadius = "17px"
     // person_contentflydiv_picbar1.appendChild(person_contentflydiv_button);
     person_contentflydiv_button.style.fontFamily = "Trebuchet MS, Arial, Helvetica";
     person_contentflydiv_button.style.fontSize = "15px";
