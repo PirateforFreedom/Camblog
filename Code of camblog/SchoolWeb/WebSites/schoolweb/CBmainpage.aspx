@@ -33,7 +33,7 @@
          </div>
          <div id="zhuce">
              <button type="button"id="zhucebutton" name="zhucebutton" 
-   onclick="location.href='CBinforshareroom.aspx'">Sign Up</button>
+   onclick="location.href='CBSign_up.aspx'">Sign Up</button>
          </div>
          
      </div>

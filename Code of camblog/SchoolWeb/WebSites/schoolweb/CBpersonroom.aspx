@@ -50,7 +50,7 @@
             <div id="bfollowers-line"></div>
         </div>
         <div id="ToFollow">
-            <button type="button"id="ToFollowsbutton" name="ToFollowbutton" 
+            <button type="button"id="ToFollowsbutton" name="ToFollowbutton" onclick="jumpEdit()"
     >Edit Profile</button>
         </div>
     </div>
