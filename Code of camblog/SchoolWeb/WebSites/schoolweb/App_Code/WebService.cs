@@ -12,14 +12,14 @@ using System.IO;
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 // 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消注释以下行。 
- [System.Web.Script.Services.ScriptService]
+[System.Web.Script.Services.ScriptService]
 public class WebService : System.Web.Services.WebService
 {
     mysqlconnect mysl;
     public WebService()
     {
         mysl = new mysqlconnect();
-     
+
         //如果使用设计的组件，请取消注释以下行 
         //InitializeComponent(); 
     }
@@ -30,45 +30,45 @@ public class WebService : System.Web.Services.WebService
         return "Hello World";
     }
     [WebMethod]
-    
-    public string VerifyUser(string username,string password)
+
+    public string VerifyUser(string username, string password)
     {
-        DataTable dtb = mysl.ExecuteDataTable("select * from r_user_information_t where user_name='"+username+"' and user_password='"+password+"'");
+        DataTable dtb = mysl.ExecuteDataTable("select * from r_user_information_t where user_name='" + username + "' and user_password='" + password + "'");
         if (dtb.Rows.Count == 1)
         {
-            return "yes"; 
+            return "yes";
         }
-       else
-       {
+        else
+        {
             return "no";
 
         }
-       
+
     }
     [WebMethod]
-    public string InsertCommentTxt(string strtxt, string usernamef, string userposttime,string pic)
+    public string InsertCommentTxt(string strtxt, string usernamef, string userposttime, string pic)
     {
 
-            string squd = "insert into r_person_posts_comment_t(user_posts_personnum,user_reply_content,user_replyer,user_follower_pictrue,user_comment_date)" +
-"values('" + userposttime + "', '" + strtxt + "','"+ usernamef+ "','"+ pic + "',NOW())";
+        string squd = "insert into r_person_posts_comment_t(user_posts_personnum,user_reply_content,user_replyer,user_follower_pictrue,user_comment_date)" +
+"values('" + userposttime + "', '" + strtxt + "','" + usernamef + "','" + pic + "',NOW())";
 
-            int ty1 = mysl.ExecuteNonQuery(squd);
+        int ty1 = mysl.ExecuteNonQuery(squd);
         int numposts = 0;
         string strquary = "select user_post_coment_sum from r_person_posts_t where user_post_personsd='" + userposttime + "'";
         DataTable dtb = mysl.ExecuteDataTable(strquary);
-            int st = int.Parse(dtb.Rows[0][0].ToString());
-            st++;
-        numposts = st;  
-        string vb = "update r_person_posts_t set user_post_coment_sum='"+ numposts+"' where user_post_personsd='" + userposttime + "'";
+        int st = int.Parse(dtb.Rows[0][0].ToString());
+        st++;
+        numposts = st;
+        string vb = "update r_person_posts_t set user_post_coment_sum='" + numposts + "' where user_post_personsd='" + userposttime + "'";
         int ty3 = mysl.ExecuteNonQuery(vb);
         return "yes";
-     
+
     }
     [WebMethod]
     public string InsertCommentlikes(string userposttime)
     {
 
-        
+
         int numposts = 0;
         string strquary = "select user_post_like_num from r_person_posts_t where user_post_personsd='" + userposttime + "'";
         DataTable dtb = mysl.ExecuteDataTable(strquary);
@@ -79,6 +79,50 @@ public class WebService : System.Web.Services.WebService
         int ty3 = mysl.ExecuteNonQuery(vb);
         return "yes";
 
+    }
+    /*
+     * 给定用户名 取出用户信息
+     */
+    [WebMethod]
+    public  DataSet SearchforInformation(string name)
+    {
+        string str = "select user_pictrue,statement,major_in,country,school_name,email,birth,enroll from r_user_information_t where user_name='"+name+"'";
+        DataTable dbt = mysl.ExecuteDataTable(str);      
+        DataTable table = new DataTable("table");
+        DataSet dataset = new DataSet();
+        table.Columns.Add("user_pictrue");
+        table.Columns.Add("statement");
+        table.Columns.Add("major_in");
+        table.Columns.Add("country");
+        table.Columns.Add("school_name");
+        table.Columns.Add("email");
+        table.Columns.Add("birth");
+        table.Columns.Add("enroll");
+        var UserPhoto = "";
+        string path = dbt.Rows[0][0].ToString().Replace('/','\\');
+        //string path = dbt.Rows[0][0].ToString();
+        var strUploadPath = HttpContext.Current.Server.MapPath("") + path;
+        System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(strUploadPath);
+        using (MemoryStream ms1 = new MemoryStream())
+        {
+            bmp1.Save(ms1, System.Drawing.Imaging.ImageFormat.Jpeg);
+            byte[] arr1 = new byte[ms1.Length];
+            ms1.Position = 0;
+            ms1.Read(arr1, 0, (int)ms1.Length);
+            ms1.Close();
+            UserPhoto = Convert.ToBase64String(arr1);
+        }
+
+
+        ////F:\School\Camblog\Code of camblog\SchoolWeb\WebSites\schoolweb / picture / bn.jpg
+        ////路径问题
+
+
+
+        UserPhoto = "data:image/jpeg;base64," + UserPhoto;
+            table.Rows.Add(path, dbt.Rows[0][1].ToString(), dbt.Rows[0][2].ToString(), dbt.Rows[0][3].ToString(), dbt.Rows[0][4].ToString(), dbt.Rows[0][5].ToString(), dbt.Rows[0][6].ToString(), dbt.Rows[0][7].ToString());
+        dataset.Tables.Add(table);
+        return dataset;
     }
     [WebMethod]
  /*
@@ -97,8 +141,11 @@ public class WebService : System.Web.Services.WebService
 
         }
     }
+    /*
+     * 保存用户头像
+     */
     [WebMethod]
-    public string SaveImage(string image ,string name)
+    public DataSet SaveImage(string image ,string name)
     {
         string username = name;
         var arr = image.Split(',');
@@ -110,12 +157,37 @@ public class WebService : System.Web.Services.WebService
             Directory.CreateDirectory(strUploadPath);
         }
         string strImagePath = strUploadPath + '\\' + username + ".jpeg";
+       DataSet dataset = new DataSet();
+       DataTable table = new DataTable("table");
         Console.Write(strImagePath);
         using(FileStream objfilestream = new FileStream(strImagePath, FileMode.Create, FileAccess.ReadWrite))
         {
             objfilestream.Write(bytes, 0, bytes.Length);
         }
-        return "yes";
+        table.Columns.Add("result");
+        table.Rows.Add("yes");
+        dataset.Tables.Add(table);
+        return dataset;
+        
+    }
+
+    [WebMethod]
+    
+   // 更改用户信息   
+   
+    public string AlterInformation(string nickname,string specialty,string school,string email,string country,string oldname)
+    {
+        string vb = "UPDATE r_user_information_t SET user_name ='" + nickname + "', major_in = '"+specialty+ "', school_name = '" +
+            school+"', email='"+email+"',country='"+country+"' WHERE user_name = '" + oldname + "'";
+        int ty3 = mysl.ExecuteNonQuery(vb);
+        if (ty3 == 1)
+        {
+            return "yes";
+        }else
+        {
+            return "no";
+        }
+        
     }
     [WebMethod]
     /*
@@ -143,8 +215,10 @@ public class WebService : System.Web.Services.WebService
         //string strsql = "insert into r_user_information_t(user_name,user_password,person_real,ageing,school_name,sex_id,country,major_in) " +
         //    "values('" + nickname + "', '" + pass + "', '" + realname + "', " + ageing+ ", '"+school+"', "+sex_id+", '"+country+"', '"+specialty+
         //    "',NOW())";
-
+        string sql2 = "insert into r_person_postsffsum_t(user_name,user_posts_num,user_following_num,user_follower_num,user_name_tiaoshu) values('" + nickname + "'," 
+             + 0 + "," + 0 + "," + 0 + "," + 0 + ")";
         int ty1 = mysl.ExecuteNonQuery(strsql);
+        int ty2 = mysl.ExecuteNonQuery(sql2);
         if(ty1 == 1)
         {
             return "yes";
