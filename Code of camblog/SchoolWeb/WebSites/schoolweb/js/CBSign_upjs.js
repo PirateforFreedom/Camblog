@@ -157,6 +157,7 @@ function getSex() {
 }
 function VerifyName() {
     var name = document.getElementById("nickname").value;
+    var flag = "yes";
     $.ajax({
         type: "POST",   //访问WebService使用Post方式请求
         contentType: "application/json", //WebService 会返回Json类型
@@ -170,14 +171,15 @@ function VerifyName() {
             if (json == "yes") {
                 alert("用户名已被注册");
                 document.getElementById("nickname").value = "";
-                
+                flag = "no";
             }
             else {
-                
-            
+                flag = "yes";            
             }
         }
     });
+    
+    return flag;
 }
 function InsertInformation() {
     var name = document.getElementById("nickname").value;
@@ -200,7 +202,8 @@ function InsertInformation() {
         success: function (result) {     //回调函数，result，返回值
             var json = result.d
             if (json == "yes") {
-                alert("用户名已注册成功,请重新登录");                
+                alert("用户名已注册成功,请重新登录");
+                window.location.href = "CBmainpage.aspx";
             }
             else {
                 alert("请重新注册")
@@ -213,6 +216,7 @@ function SaveImage() {
     var file = document.getElementById("upload").files[0]; //获取上传文件列表中第一个文件   
     var reader = new FileReader(); //实例一个文件对象
     reader.readAsDataURL(file); //把上传的文件转换成url
+    var flag = "yes";
     reader.onload = function (e) {
         //当文件读取成功便可以调取上传的接口
         var image = new Image();
@@ -223,25 +227,27 @@ function SaveImage() {
 
         // 获取 canvas DOM 对象 
         document.getElementById("cvs").src = this.result;
-       
-        alert(username+"  de");
+        
         $.ajax({
-            type: "POST",   //访问WebService使用Post方式请求
-            ContentType: "application/json", //WebService 会返回Json类型
+            type: "POST",   //访问WebService使用Post方式请求         
             url: "WebService.asmx/SaveImage", //调用WebService的地址和方法名称组合 ---- WsURL/方法名                      
             data: { image: image.src, name: username },
-            dataType: 'json',
-            success: function (result) {//回调函数，result，返回值
-                var r = result.d;
-                if (r == "yes") {
-                    alert("right");
-                } else {
-                    alert("errpr");
-                }
+            dataType: 'xml',
+            success: function (data) {//回调函数，result，返回值              
+                $.each($.find("table", data), function () {
+                    var result = $(this).find("result").text();
+                    if (r == "yes") {
+                     
+                    
+                     } else {
+                        flag = "no";
+                     }
+                })                                             
             }
 
         });
     };
+    return flag;
 }
 
 
@@ -306,13 +312,16 @@ function checkAll() {
     var enroll = getenroll();    
     var country = checkCountry();    
     var nickname = VerifyName();
+    
     if (name && pass1 && pass2 && realname && specialty && school && email && birth && enroll && country ) {
         if (nickname == "yes") {
-            if (SaveImage() == 'yes') {
+            var save = SaveImage();            
+            if (save == "yes") {
                 InsertInformation();
+                alert("信息保存完毕")
                 return true;
             } else {
-                alert("保存图片错误");
+                alert("保存信息错误");
             }               
         }     
     } else {

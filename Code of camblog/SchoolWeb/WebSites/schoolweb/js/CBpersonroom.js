@@ -1,4 +1,10 @@
-﻿
+﻿/*
+跳转到个人信息编辑页面
+*/
+function jumpEdit() {
+    var usernamer = getQueryString("username");
+    window.location.href = "CBPersonInformation.aspx?username=" + usernamer;
+}
 function jumpstakroom() {
     var bthome = document.getElementById('personbar-name');
     var usernamer = bthome.innerHTML;
